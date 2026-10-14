@@ -1,16 +1,54 @@
-# React + Vite
+# Dharshini JG | Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Welcome to my personal portfolio! I am a final-year B.Sc. Computer Science student at Thiagarajar College, Madurai, interested in Data Analytics, Business Analytics, and technology.
 
-Currently, two official plugins are available:
+## About Me
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+I enjoy exploring data, solving problems, and building projects that turn ideas into practical solutions. I am continuously improving my technical skills and preparing for opportunities in the IT industry.
 
-## React Compiler
+## Skills
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Data Analytics:** Excel, SQL, Power BI
+- **Programming:** Python, Java, C
+- **Python Libraries:** Pandas (beginner)
+- **Web Technologies:** HTML, CSS, JavaScript
+- **Database:** MySQL
+- **Tools:** Git, GitHub, Power BI
 
-## Expanding the Oxlint configuration
+## Projects
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### 1. BigMart Sales Analysis
+A data analytics project focused on sales performance, outlet analysis, product insights, and interactive dashboard reporting.
+
+**Tools:** Excel, MySQL, Power BI
+
+[View Project on GitHub](https://github.com/dharshini-75/BigMart-Sales-Analysis)
+
+### 2. FinGuard AI
+A finance-focused project exploring transaction analysis and identifying payment or settlement exceptions.
+
+[View Project on GitHub](https://github.com/dharshini-75/finguard-ai)
+
+### 3. SHEmpower
+A mobile application designed to support women's self-help groups with savings management, loan tracking, repayments, and financial records.
+
+[View Project on GitHub](https://github.com/dharshini-75/-shempower)
+
+## Education
+
+**B.Sc. Computer Science**  
+Thiagarajar College, Madurai  
+Expected Graduation: 2027
+
+## Certification
+
+IBM Data Analyst Professional Certificate — Coursera
+
+## Connect With Me
+
+- **GitHub:** [dharshini-75](https://github.com/dharshini-75)
+- **LinkedIn:** [Dharshini Gunasekaran](https://www.linkedin.com/in/dharshini-gunasekaran-5474a5319/)
+
+---
+
+*Thank you for visiting my portfolio! I am always eager to learn, build, and grow as a technology professional.*
