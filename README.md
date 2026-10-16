@@ -11,28 +11,24 @@ I enjoy exploring data, solving problems, and building projects that turn ideas 
 - **Data Analytics:** Excel, SQL, Power BI
 - **Programming:** Python, Java, C
 - **Python Libraries:** Pandas (beginner)
-- **Web Technologies:** HTML, CSS, JavaScript
 - **Database:** MySQL
 - **Tools:** Git, GitHub, Power BI
 
 ## Projects
 
 ### 1. BigMart Sales Analysis
+
 A data analytics project focused on sales performance, outlet analysis, product insights, and interactive dashboard reporting.
 
 **Tools:** Excel, MySQL, Power BI
 
 [View Project on GitHub](https://github.com/dharshini-75/BigMart-Sales-Analysis)
 
-### 2. FinGuard AI
-A finance-focused project exploring transaction analysis and identifying payment or settlement exceptions.
+### 2. Uber Ride Analysis
 
-[View Project on GitHub](https://github.com/dharshini-75/finguard-ai)
+A data analytics project analyzing approximately 150,000 ride-booking records to understand booking trends, customer and driver cancellations, peak booking hours, vehicle performance, and completed ride value. Python and Pandas were used for data cleaning and exploratory data analysis, while MySQL was used to perform SQL-based business analysis. Interactive Power BI dashboards present key business insights.
 
-### 3. SHEmpower
-A mobile application designed to support women's self-help groups with savings management, loan tracking, repayments, and financial records.
-
-[View Project on GitHub](https://github.com/dharshini-75/-shempower)
+**Tools:** Python, Pandas, Matplotlib, MySQL, SQL, Power BI
 
 ## Education
 
