@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, ArrowRight, Layers, Sparkles, Eye, Info } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { projectsData } from '../data/portfolioData';
-import { BigMartMockup, FinGuardMockup, SHEmpowerMockup } from './ProjectMockups';
+import { BigMartMockup, UberRideMockup } from './ProjectMockups';
 import ProjectModal from './ProjectModal';
 
 export default function Projects() {
@@ -38,7 +38,7 @@ export default function Projects() {
           </div>
 
           <p className="text-neutral-400 text-xs sm:text-sm font-light max-w-sm">
-            Interactive analytics dashboards, explainable AI reconciliation, and community fintech applications built with precision.
+            Interactive analytics dashboards, business intelligence insights, and data-driven solutions built with precision.
           </p>
         </div>
 
@@ -54,30 +54,20 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-card rounded-2xl border border-white/[0.08] hover:border-orange-500/35 transition-all duration-300 p-6 sm:p-8 relative overflow-hidden group shadow-xl"
+                className="glass-card rounded-2xl border border-white/[0.08] hover:border-orange-500/35 transition-all duration-300 p-4 sm:p-6 lg:p-8 relative overflow-hidden group shadow-xl"
               >
                 {/* Background glow on card hover */}
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500/10 via-transparent to-amber-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                <div className={`relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${
+                <div className={`relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center ${
                   isReversed ? 'lg:flex-row-reverse' : ''
                 }`}>
                   
                   {/* Visual Mockup Container (7 cols) */}
                   <div className={`lg:col-span-7 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                    <div className="relative group/mockup">
+                    <div className="relative">
                       {project.id === 'bigmart-sales-analysis' && <BigMartMockup />}
-                      {project.id === 'finguard-ai' && <FinGuardMockup />}
-                      {project.id === 'shempower' && <SHEmpowerMockup />}
-
-                      {/* Hover action banner overlay */}
-                      <button
-                        onClick={() => openProjectDetails(project)}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-[2px] opacity-0 group-hover/mockup:opacity-100 transition-all duration-200 rounded-xl flex items-center justify-center gap-2 text-white font-medium text-xs cursor-pointer"
-                      >
-                        <Eye className="w-4 h-4 text-orange-400" />
-                        <span>Click to Inspect Full Case Study</span>
-                      </button>
+                      {project.id === 'uber-ride-analysis' && <UberRideMockup />}
                     </div>
                   </div>
 
@@ -96,7 +86,7 @@ export default function Projects() {
                       </div>
 
                       {/* Title & Subtitle */}
-                      <h3 className="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-orange-400 transition-colors">
+                      <h3 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-white group-hover:text-orange-400 transition-colors">
                         {project.title}
                       </h3>
                       <p className="font-mono text-xs text-orange-400/90 mt-1 mb-4">
@@ -122,26 +112,28 @@ export default function Projects() {
                     </div>
 
                     {/* CTAs */}
-                    <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center gap-3">
+                    <div className="pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
                       <button
                         onClick={() => openProjectDetails(project)}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs tracking-wide transition-all shadow-[0_0_15px_rgba(255,107,53,0.3)] active:scale-95"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs tracking-wide transition-all shadow-[0_0_15px_rgba(255,107,53,0.3)] active:scale-95"
                       >
                         <Info className="w-3.5 h-3.5" />
                         <span>Case Study Details</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
 
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141722] hover:bg-[#1C2030] border border-white/[0.08] hover:border-orange-500/40 text-neutral-300 hover:text-white font-medium text-xs transition-all active:scale-95"
-                      >
-                        <GithubIcon className="w-4 h-4" />
-                        <span>View Project</span>
-                        <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-                      </a>
+                      {project.github ? (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#141722] hover:bg-[#1C2030] border border-white/[0.08] hover:border-orange-500/40 text-neutral-300 hover:text-white font-medium text-xs transition-all active:scale-95"
+                        >
+                          <GithubIcon className="w-4 h-4" />
+                          <span>View Project</span>
+                          <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+                        </a>
+                      ) : null}
                     </div>
 
                   </div>

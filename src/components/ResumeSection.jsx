@@ -64,7 +64,7 @@ export default function ResumeSection() {
               </h3>
 
               <p className="text-neutral-300 text-sm font-light leading-relaxed">
-                Contains verified educational background at Thiagarajar College (2024–2027), technical competencies in Power BI, SQL, Excel, and MySQL, full case breakdowns of BigMart Sales Analysis, FinGuard AI, and SHEmpower, and IBM Data Analyst credentials.
+                Contains verified educational background at Thiagarajar College (2024–2027), technical competencies in Power BI, SQL, Excel, and MySQL, full case breakdowns of BigMart Sales Analysis and Uber Ride Analysis, and IBM Data Analyst credentials.
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">

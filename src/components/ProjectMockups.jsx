@@ -1,344 +1,401 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BarChart3, 
-  TrendingUp, 
-  Database, 
-  ShieldAlert, 
-  Cpu, 
-  Smartphone, 
-  CheckCircle, 
+  Maximize2, 
+  X, 
+  ChevronLeft, 
+  ChevronRight, 
+  ZoomIn, 
   Layers, 
-  Search, 
-  AlertTriangle,
-  ArrowUpRight,
-  Sparkles
+  BarChart3, 
+  Sparkles,
+  Info
 } from 'lucide-react';
+import { projectsData } from '../data/portfolioData';
 
-export function BigMartMockup() {
-  const [activeTab, setActiveTab] = useState('executive');
+// Reusable Lightbox for inspecting high-res dashboard images
+export function DashboardLightbox({ images, currentIndex, isOpen, onClose, onSelectIndex }) {
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
-  return (
-    <div className="w-full bg-[#0A0D14] rounded-xl border border-white/[0.08] p-3 sm:p-4 text-xs font-sans overflow-hidden shadow-2xl">
-      {/* Power BI Mock Header */}
-      <div className="flex flex-wrap items-center justify-between pb-3 border-b border-white/[0.08] gap-2">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-amber-500/80" />
-          <span className="font-mono text-[11px] text-neutral-300 font-semibold tracking-wider uppercase">
-            Power BI // BigMart Sales Dashboard
-          </span>
-        </div>
+  useEffect(() => {
+    // Reset zoom state on slide change
+    setIsZoomed(false);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isOpen) return;
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight' && currentIndex < images.length - 1) onSelectIndex(currentIndex + 1);
+      if (e.key === 'ArrowLeft' && currentIndex > 0) onSelectIndex(currentIndex - 1);
+      if (e.key === 'f' || e.key === 'F') setIsZoomed((prev) => !prev);
+    };
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, currentIndex, images.length, onClose, onSelectIndex]);
+
+  // Touch swipe handling for mobile phones
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 45;
+    if (distance > minSwipeDistance && currentIndex < images.length - 1) {
+      onSelectIndex(currentIndex + 1);
+    } else if (distance < -minSwipeDistance && currentIndex > 0) {
+      onSelectIndex(currentIndex - 1);
+    }
+  };
+
+  if (!isOpen || !images || images.length === 0) return null;
+
+  const current = images[currentIndex] || images[0];
+
+  const content = (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[99999] flex flex-col bg-[#05070B] text-white select-none overflow-hidden">
         
-        {/* Interactive Tabs inside mockup */}
-        <div className="flex items-center gap-1 bg-[#12151E] p-1 rounded-lg border border-white/[0.06]">
-          <button
-            onClick={() => setActiveTab('executive')}
-            className={`px-2 py-0.5 rounded text-[10px] font-medium transition-colors ${
-              activeTab === 'executive' 
-                ? 'bg-orange-500 text-white' 
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            Executive Overview
-          </button>
-          <button
-            onClick={() => setActiveTab('outlet')}
-            className={`px-2 py-0.5 rounded text-[10px] font-medium transition-colors ${
-              activeTab === 'outlet' 
-                ? 'bg-orange-500 text-white' 
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            Outlet Analysis
-          </button>
-          <button
-            onClick={() => setActiveTab('product')}
-            className={`px-2 py-0.5 rounded text-[10px] font-medium transition-colors ${
-              activeTab === 'product' 
-                ? 'bg-orange-500 text-white' 
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            Product Deep Dive
-          </button>
-        </div>
-      </div>
-
-      {activeTab === 'executive' && (
-        <div className="mt-3 space-y-3">
-          {/* KPI Cards */}
-          <div className="grid grid-cols-4 gap-2">
-            <div className="p-2 rounded-lg bg-[#141824] border border-white/[0.05]">
-              <span className="text-[10px] text-neutral-400 block font-mono">Total Sales</span>
-              <span className="text-white font-mono font-bold text-xs sm:text-sm">$18.59M</span>
-            </div>
-            <div className="p-2 rounded-lg bg-[#141824] border border-white/[0.05]">
-              <span className="text-[10px] text-neutral-400 block font-mono">Avg Ticket</span>
-              <span className="text-orange-400 font-mono font-bold text-xs sm:text-sm">$2,181</span>
-            </div>
-            <div className="p-2 rounded-lg bg-[#141824] border border-white/[0.05]">
-              <span className="text-[10px] text-neutral-400 block font-mono">Total Outlets</span>
-              <span className="text-white font-mono font-bold text-xs sm:text-sm">10 Stores</span>
-            </div>
-            <div className="p-2 rounded-lg bg-[#141824] border border-white/[0.05]">
-              <span className="text-[10px] text-neutral-400 block font-mono">Records</span>
-              <span className="text-white font-mono font-bold text-xs sm:text-sm">8,523</span>
+        {/* Top Header Bar */}
+        <div className="h-14 sm:h-16 shrink-0 border-b border-white/[0.08] px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-3 bg-[#090C14]/90 z-20">
+          {/* Title & Status */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(255,107,53,0.8)] shrink-0" />
+            <div className="truncate">
+              <h3 className="font-display font-bold text-xs sm:text-base text-white truncate leading-tight">
+                {current.title}
+              </h3>
+              <p className="font-mono text-[10px] sm:text-[11px] text-neutral-400 truncate hidden sm:block">
+                {current.subtitle || `Power BI View ${currentIndex + 1} of ${images.length}`}
+              </p>
             </div>
           </div>
 
-          {/* Bar & Category Distribution */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="p-2.5 rounded-lg bg-[#121520] border border-white/[0.05]">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[10px] text-neutral-300 font-medium">Sales by Outlet Type</span>
-                <span className="text-[9px] font-mono text-orange-400">MySQL Aggregated</span>
-              </div>
-              <div className="space-y-1.5">
-                <div>
-                  <div className="flex justify-between text-[10px] text-neutral-400 mb-0.5">
-                    <span>Supermarket Type 1</span>
-                    <span className="font-mono text-neutral-200">65.4%</span>
-                  </div>
-                  <div className="w-full bg-[#1C2030] h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-orange-500 h-full rounded-full" style={{ width: '65.4%' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-[10px] text-neutral-400 mb-0.5">
-                    <span>Supermarket Type 3</span>
-                    <span className="font-mono text-neutral-200">18.2%</span>
-                  </div>
-                  <div className="w-full bg-[#1C2030] h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-amber-400 h-full rounded-full" style={{ width: '18.2%' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-[10px] text-neutral-400 mb-0.5">
-                    <span>Grocery Store</span>
-                    <span className="font-mono text-neutral-200">10.3%</span>
-                  </div>
-                  <div className="w-full bg-[#1C2030] h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-neutral-500 h-full rounded-full" style={{ width: '10.3%' }} />
-                  </div>
-                </div>
+          {/* Interactive Page Switcher Tabs (Desktop / Tablet) */}
+          <div className="hidden md:flex items-center gap-1 bg-[#121622] p-1 rounded-xl border border-white/[0.06] shrink-0">
+            {images.map((item, idx) => (
+              <button
+                key={item.id || idx}
+                onClick={() => onSelectIndex(idx)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                  idx === currentIndex
+                    ? 'bg-orange-500 text-white font-semibold shadow-md'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <span>{item.tabLabel || item.title}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Controls: Zoom, Page counter, Close */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <span className="font-mono text-[11px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-lg bg-white/[0.06] text-neutral-300 border border-white/[0.08]">
+              {currentIndex + 1} / {images.length}
+            </span>
+
+            <button
+              onClick={() => setIsZoomed((prev) => !prev)}
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 hover:text-white border border-white/[0.08] text-[11px] sm:text-xs font-mono transition-all cursor-pointer"
+              title={isZoomed ? "Fit to screen view" : "Actual 100% resolution view"}
+            >
+              <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-400" />
+              <span>{isZoomed ? 'Fit' : '100%'}</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/[0.06] hover:bg-orange-500 hover:text-white text-neutral-300 transition-colors border border-white/[0.08] cursor-pointer"
+              aria-label="Close fullscreen view"
+              title="Close (Esc)"
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Main Display Area (Full Viewport Fit & Swipe on Mobile) */}
+        <div 
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          className={`flex-1 min-h-0 min-w-0 relative flex items-center justify-center p-2 sm:p-5 md:p-6 ${
+            isZoomed ? 'overflow-auto cursor-zoom-out' : 'overflow-hidden'
+          }`}
+        >
+          {/* Main Screenshot Canvas */}
+          <div
+            className={`flex items-center justify-center ${
+              isZoomed ? 'min-w-[1200px] w-full py-4' : 'w-full h-full'
+            }`}
+            onClick={() => isZoomed && setIsZoomed(false)}
+          >
+            <img
+              src={current.image}
+              alt={current.title}
+              className={`rounded-lg sm:rounded-xl shadow-2xl border border-white/[0.12] bg-[#0A0D15] transition-all duration-150 ${
+                isZoomed
+                  ? 'w-full h-auto object-contain shadow-[0_0_50px_rgba(0,0,0,0.8)]'
+                  : 'max-w-full max-h-full w-auto h-auto object-contain'
+              }`}
+              style={{
+                maxHeight: isZoomed ? 'none' : 'calc(100vh - 125px)',
+                maxWidth: isZoomed ? 'none' : 'min(calc(100vw - 16px), 1400px)'
+              }}
+            />
+          </div>
+
+          {/* Desktop Left Arrow Button */}
+          {images.length > 1 && (
+            <button
+              disabled={currentIndex === 0}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectIndex(Math.max(0, currentIndex - 1));
+              }}
+              className="hidden sm:flex absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#0E121E]/80 hover:bg-orange-500 text-white disabled:opacity-20 disabled:pointer-events-none transition-all backdrop-blur-md border border-white/15 items-center justify-center shadow-xl cursor-pointer z-10"
+              aria-label="Previous view"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+
+          {/* Desktop Right Arrow Button */}
+          {images.length > 1 && (
+            <button
+              disabled={currentIndex === images.length - 1}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectIndex(Math.min(images.length - 1, currentIndex + 1));
+              }}
+              className="hidden sm:flex absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#0E121E]/80 hover:bg-orange-500 text-white disabled:opacity-20 disabled:pointer-events-none transition-all backdrop-blur-md border border-white/15 items-center justify-center shadow-xl cursor-pointer z-10"
+              aria-label="Next view"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
+        </div>
+
+        {/* Bottom Status & Mobile Thumb Bar */}
+        <div className="h-14 shrink-0 border-t border-white/[0.08] px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 bg-[#090C14]/90 text-xs font-mono z-20">
+          
+          {/* Caption / Key Takeaway (Desktop) */}
+          <div className="hidden sm:flex items-center gap-2 min-w-0 text-neutral-300">
+            <Info className="w-4 h-4 text-orange-400 shrink-0" />
+            <p className="truncate text-xs">
+              <strong className="text-white font-medium">{current.title}:</strong>{' '}
+              <span className="text-neutral-400">{current.caption}</span>
+            </p>
+          </div>
+
+          {/* Mobile Navigation Controls (< Page Tabs >) */}
+          <div className="flex sm:hidden items-center justify-between w-full gap-2">
+            <button
+              disabled={currentIndex === 0}
+              onClick={() => onSelectIndex(Math.max(0, currentIndex - 1))}
+              className="p-1.5 rounded-lg bg-white/[0.08] disabled:opacity-25 text-white active:bg-orange-500 transition-colors"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Mobile Tab Switcher Pills */}
+            <div className="flex items-center gap-1 overflow-x-auto max-w-[230px] no-scrollbar py-0.5">
+              {images.map((item, idx) => (
+                <button
+                  key={item.id || idx}
+                  onClick={() => onSelectIndex(idx)}
+                  className={`px-2 py-1 rounded text-[10px] font-mono whitespace-nowrap transition-all ${
+                    idx === currentIndex
+                      ? 'bg-orange-500 text-white font-semibold shadow-sm'
+                      : 'bg-white/[0.06] text-neutral-400'
+                  }`}
+                >
+                  {item.tabLabel || item.title}
+                </button>
+              ))}
+            </div>
+
+            <button
+              disabled={currentIndex === images.length - 1}
+              onClick={() => onSelectIndex(Math.min(images.length - 1, currentIndex + 1))}
+              className="p-1.5 rounded-lg bg-white/[0.08] disabled:opacity-25 text-white active:bg-orange-500 transition-colors"
+              aria-label="Next page"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Desktop Keyboard hint */}
+          <div className="hidden lg:flex items-center gap-2 text-neutral-500 shrink-0 text-[11px]">
+            <span>Navigate: <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] text-neutral-300">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] text-neutral-300">→</kbd></span>
+            <span>•</span>
+            <span>Close: <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] text-neutral-300">Esc</kbd></span>
+          </div>
+
+        </div>
+
+      </div>
+    </AnimatePresence>
+  );
+
+  return typeof document !== 'undefined' ? createPortal(content, document.body) : null;
+}
+
+// Master Dashboard Viewer Component for project cards
+export function DashboardViewer({ project, accent = 'orange' }) {
+  const dashboards = project?.dashboards || [];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const activeDashboard = dashboards[activeIndex] || dashboards[0];
+
+  if (!activeDashboard) return null;
+
+  return (
+    <>
+      <div className="w-full bg-[#0A0D15] rounded-xl border border-white/[0.08] hover:border-orange-500/30 transition-all duration-300 p-2 sm:p-3.5 shadow-2xl overflow-hidden group/viewer">
+        
+        {/* Top Window Bar - Responsive Flex Layout */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2 mb-2 border-b border-white/[0.08] gap-2">
+          {/* Status & Title */}
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex gap-1 mr-0.5 shrink-0">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-red-500/80" />
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-amber-500/80" />
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-emerald-500/80" />
+            </div>
+            <span className="font-mono text-[10px] sm:text-[11px] text-neutral-300 font-medium tracking-wide truncate">
+              Power BI // {project.title}
+            </span>
+          </div>
+
+          {/* Interactive Page Tabs */}
+          <div className="flex items-center gap-1 bg-[#121622] p-0.5 sm:p-1 rounded-lg border border-white/[0.06] overflow-x-auto max-w-full no-scrollbar">
+            {dashboards.map((dash, idx) => (
+              <button
+                key={dash.id || idx}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex(idx);
+                }}
+                className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-[11px] font-medium transition-all whitespace-nowrap cursor-pointer shrink-0 ${
+                  activeIndex === idx
+                    ? 'bg-orange-500 text-white shadow-md'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                {dash.tabLabel || dash.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard Image Canvas Container */}
+        <div 
+          onClick={() => setLightboxOpen(true)}
+          className="relative aspect-[16/9] w-full rounded-lg overflow-hidden bg-[#0F121C] border border-white/[0.06] cursor-pointer group/image"
+          title="Click to zoom and view full dashboard resolution"
+        >
+          {/* Main Screenshot */}
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={activeDashboard.image}
+              src={activeDashboard.image}
+              alt={activeDashboard.title}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full h-full object-contain bg-slate-950 transition-transform duration-500 group-hover/image:scale-[1.01]"
+              loading="lazy"
+            />
+          </AnimatePresence>
+
+          {/* Hover / Tap Overlay with Zoom Icon */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 flex flex-col justify-between p-2.5 sm:p-3">
+            <div className="flex justify-between items-center">
+              <span className="font-mono text-[9px] sm:text-[10px] text-orange-400 bg-black/70 px-2 py-0.5 rounded border border-orange-500/30 backdrop-blur-md">
+                Power BI Dashboard
+              </span>
+              <div className="p-1 sm:p-1.5 rounded-lg bg-orange-500 text-white shadow-lg flex items-center gap-1 text-[10px] font-semibold">
+                <ZoomIn className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <span>Inspect</span>
               </div>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-[#121520] border border-white/[0.05] flex flex-col justify-between">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-[10px] text-neutral-300 font-medium">Location Tier Share</span>
-                <span className="text-[9px] font-mono text-neutral-500">Tier 1-3</span>
-              </div>
-              <div className="grid grid-cols-3 gap-1.5 text-center my-auto">
-                <div className="p-1.5 bg-[#171B28] rounded border border-white/[0.04]">
-                  <span className="text-[10px] text-neutral-400 block font-mono">Tier 3</span>
-                  <span className="text-orange-400 font-bold font-mono text-xs">39.4%</span>
-                </div>
-                <div className="p-1.5 bg-[#171B28] rounded border border-white/[0.04]">
-                  <span className="text-[10px] text-neutral-400 block font-mono">Tier 2</span>
-                  <span className="text-white font-bold font-mono text-xs">32.2%</span>
-                </div>
-                <div className="p-1.5 bg-[#171B28] rounded border border-white/[0.04]">
-                  <span className="text-[10px] text-neutral-400 block font-mono">Tier 1</span>
-                  <span className="text-white font-bold font-mono text-xs">28.4%</span>
-                </div>
-              </div>
-              <span className="text-[9px] text-neutral-400 text-center font-mono mt-1">
-                Tier 3 outlets lead in gross volume revenue.
+            <div className="text-center">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-500 text-white font-medium text-xs shadow-lg transform -translate-y-1 transition-transform">
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span>Tap to Full View</span>
               </span>
             </div>
-          </div>
-        </div>
-      )}
 
-      {activeTab === 'outlet' && (
-        <div className="mt-3 space-y-2">
-          <div className="p-3 bg-[#121520] rounded-lg border border-white/[0.05]">
-            <span className="text-[10px] text-neutral-300 font-semibold uppercase font-mono block mb-2">
-              Outlet Size vs Sales Performance (SQL Cross-Tab)
-            </span>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="p-2 bg-[#171B28] rounded border border-white/[0.04]">
-                <span className="text-[10px] text-neutral-400 block">Medium Outlets</span>
-                <span className="text-white font-mono font-bold">$7.49M</span>
-                <span className="text-[9px] text-emerald-400 block mt-0.5">Top Performer</span>
-              </div>
-              <div className="p-2 bg-[#171B28] rounded border border-white/[0.04]">
-                <span className="text-[10px] text-neutral-400 block">Small Outlets</span>
-                <span className="text-white font-mono font-bold">$4.98M</span>
-                <span className="text-[9px] text-neutral-400 block mt-0.5">Consistent</span>
-              </div>
-              <div className="p-2 bg-[#171B28] rounded border border-white/[0.04]">
-                <span className="text-[10px] text-neutral-400 block">High Outlets</span>
-                <span className="text-white font-mono font-bold">$2.14M</span>
-                <span className="text-[9px] text-amber-400 block mt-0.5">Select Footprint</span>
-              </div>
-            </div>
+            <p className="font-mono text-[10px] sm:text-[11px] text-neutral-300 text-center line-clamp-1">
+              {activeDashboard.subtitle}
+            </p>
           </div>
-          <div className="p-2 bg-[#121520] rounded text-[10px] text-neutral-400 font-mono flex items-center justify-between">
-            <span>Query: `Outlet_Analysis.sql`</span>
-            <span className="text-orange-400">Indexed by Outlet_Identifier</span>
-          </div>
-        </div>
-      )}
 
-      {activeTab === 'product' && (
-        <div className="mt-3 space-y-2">
-          <div className="p-3 bg-[#121520] rounded-lg border border-white/[0.05]">
-            <span className="text-[10px] text-neutral-300 font-semibold uppercase font-mono block mb-2">
-              Visibility vs MRP Correlation Breakdown
-            </span>
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="text-neutral-300">Fruits &amp; Vegetables (Top Volume)</span>
-                <span className="font-mono text-orange-400 font-semibold">$2.82M</span>
-              </div>
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="text-neutral-300">Snack Foods (High Turnover)</span>
-                <span className="font-mono text-orange-400 font-semibold">$2.73M</span>
-              </div>
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="text-neutral-300">Household &amp; Frozen Foods</span>
-                <span className="font-mono text-neutral-300 font-semibold">$2.06M</span>
-              </div>
-            </div>
-          </div>
-          <div className="p-2 bg-[#121520] rounded text-[10px] text-neutral-400 font-mono flex items-center justify-between">
-            <span>Query: `Price_Visibility_Analysis.sql`</span>
-            <span className="text-emerald-400">Visibility &gt; 0.08 Threshold Filtered</span>
+          {/* Persistent Page Badge in corner */}
+          <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 bg-black/80 backdrop-blur-md px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-mono text-neutral-300 border border-white/10 group-hover/image:opacity-0 transition-opacity">
+            {activeIndex + 1} / {dashboards.length}
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Caption Bar underneath */}
+        <div className="mt-2 pt-1.5 border-t border-white/[0.06] flex items-center justify-between text-[10px] sm:text-[11px] text-neutral-400 font-mono">
+          <span className="truncate text-neutral-300">
+            {activeDashboard.title}
+          </span>
+          <button
+            onClick={() => setLightboxOpen(true)}
+            className="flex items-center gap-1 text-orange-400 hover:text-orange-300 transition-colors ml-2 shrink-0 cursor-pointer text-[10px] sm:text-xs"
+          >
+            <ZoomIn className="w-3 h-3" />
+            <span>Full Resolution</span>
+          </button>
+        </div>
+
+      </div>
+
+      {/* Lightbox Modal */}
+      <DashboardLightbox
+        images={dashboards}
+        currentIndex={activeIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onSelectIndex={setActiveIndex}
+      />
+    </>
   );
 }
 
-export function FinGuardMockup() {
-  return (
-    <div className="w-full bg-[#090C12] rounded-xl border border-white/[0.08] p-3 sm:p-4 text-xs font-sans overflow-hidden shadow-2xl">
-      {/* FinGuard Terminal Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
-          </span>
-          <span className="font-mono text-[11px] text-neutral-200 font-semibold uppercase tracking-wider">
-            FinGuard AI // Controller Console
-          </span>
-        </div>
-        <span className="px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/20 text-orange-400 font-mono text-[10px]">
-          Vectorized Engine: 0.12s
-        </span>
-      </div>
-
-      <div className="mt-3 space-y-2.5">
-        {/* Status pipeline */}
-        <div className="grid grid-cols-3 gap-2">
-          <div className="p-2 rounded-lg bg-[#111520] border border-white/[0.04]">
-            <span className="text-[10px] text-neutral-400 block font-mono">Matched Clean</span>
-            <span className="text-emerald-400 font-mono font-bold text-xs">94.8% Auto</span>
-          </div>
-          <div className="p-2 rounded-lg bg-[#111520] border border-white/[0.04]">
-            <span className="text-[10px] text-neutral-400 block font-mono">Fee Spikes</span>
-            <span className="text-amber-400 font-mono font-bold text-xs">1 Anomaly</span>
-          </div>
-          <div className="p-2 rounded-lg bg-[#111520] border border-white/[0.04]">
-            <span className="text-[10px] text-neutral-400 block font-mono">Safety Hold</span>
-            <span className="text-orange-400 font-mono font-bold text-xs">Human Review</span>
-          </div>
-        </div>
-
-        {/* Gemini Investigation Audit Trail Box */}
-        <div className="p-3 rounded-lg bg-[#131724] border border-orange-500/30">
-          <div className="flex items-center gap-2 mb-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-            <span className="font-mono text-[10px] text-orange-400 font-bold uppercase tracking-wider">
-              Gemini AI Grounded Audit Trail
-            </span>
-          </div>
-          <p className="text-[11px] text-neutral-200 leading-relaxed font-sans">
-            "Batch settlement mismatch detected for TXN-7819. Bank deducted ₹42.50 fee vs contract baseline of ₹25.00 (+70% spike). Cause: International card currency conversion surcharge not flagged in payment feed."
-          </p>
-          <div className="mt-2.5 flex flex-wrap items-center gap-2 font-mono text-[10px]">
-            <span className="px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-400">
-              Risk: Medium
-            </span>
-            <span className="px-2 py-0.5 rounded bg-white/[0.05] text-neutral-300">
-              Action: Escalate to Gateway Rep
-            </span>
-            <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
-              Safety Guard Active
-            </span>
-          </div>
-        </div>
-
-        {/* Schema Adapter Tag */}
-        <div className="p-2 rounded bg-[#0E121C] border border-white/[0.04] flex items-center justify-between font-mono text-[10px] text-neutral-400">
-          <span>Adapter: Multi-currency (₹ / $ / €) parsed</span>
-          <span className="text-neutral-500">Pydantic Schema Validated</span>
-        </div>
-      </div>
-    </div>
-  );
+// Dedicated wrapper for BigMart project
+export function BigMartMockup() {
+  const project = projectsData.find((p) => p.id === 'bigmart-sales-analysis');
+  return <DashboardViewer project={project} accent="orange" />;
 }
 
-export function SHEmpowerMockup() {
-  return (
-    <div className="w-full bg-[#0A0D14] rounded-xl border border-white/[0.08] p-3 sm:p-4 text-xs font-sans overflow-hidden shadow-2xl">
-      {/* Mobile App Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-        <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-pink-500/80" />
-          <span className="font-mono text-[11px] text-neutral-200 font-semibold uppercase tracking-wider">
-            SHEmpower // SHG Mobile Portal
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/20 text-orange-400 font-mono text-[10px]">
-            தமிழ் Enabled
-          </span>
-          <span className="text-[10px] text-neutral-400 font-mono">Role: Leader</span>
-        </div>
-      </div>
-
-      <div className="mt-3 space-y-2.5">
-        {/* Passbook Overview */}
-        <div className="p-3 rounded-lg bg-gradient-to-br from-[#151926] to-[#12151E] border border-white/[0.06]">
-          <div className="flex justify-between items-start">
-            <div>
-              <span className="text-[10px] text-neutral-400 font-mono block">Group Savings Pool</span>
-              <span className="text-lg font-mono font-bold text-white mt-0.5 block">₹1,45,000</span>
-            </div>
-            <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono">
-              20 Members Active
-            </span>
-          </div>
-          <div className="mt-2 pt-2 border-t border-white/[0.05] flex justify-between text-[10px] text-neutral-400 font-mono">
-            <span>Monthly Passbook: Complete</span>
-            <span className="text-white">Next Meeting: 25th</span>
-          </div>
-        </div>
-
-        {/* Loan & Repayment Card */}
-        <div className="grid grid-cols-2 gap-2">
-          <div className="p-2.5 rounded-lg bg-[#111520] border border-white/[0.05]">
-            <span className="text-[10px] text-neutral-400 block font-mono">Reducing Interest</span>
-            <span className="text-white font-mono font-bold text-xs mt-0.5 block">1.0% / month</span>
-            <span className="text-[9px] text-neutral-500 block mt-1">Formula Auto-calculated</span>
-          </div>
-          <div className="p-2.5 rounded-lg bg-[#111520] border border-white/[0.05]">
-            <span className="text-[10px] text-neutral-400 block font-mono">UPI Verification</span>
-            <span className="text-emerald-400 font-mono font-bold text-xs mt-0.5 block">Screenshot Proof</span>
-            <span className="text-[9px] text-neutral-500 block mt-1">UTR Verification Log</span>
-          </div>
-        </div>
-
-        {/* Security & Access */}
-        <div className="p-2 rounded bg-[#0E121C] border border-white/[0.04] flex items-center justify-between font-mono text-[10px] text-neutral-400">
-          <span>Auth: Mobile No + 4-Digit Secure PIN</span>
-          <span className="text-orange-400">Capacitor Mobile Hybrid</span>
-        </div>
-      </div>
-    </div>
-  );
+// Dedicated wrapper for Uber project
+export function UberRideMockup() {
+  const project = projectsData.find((p) => p.id === 'uber-ride-analysis');
+  return <DashboardViewer project={project} accent="orange" />;
 }

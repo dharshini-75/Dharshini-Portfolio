@@ -147,8 +147,8 @@ export default function Hero() {
             <p className="text-[12px] text-neutral-400 mt-1">Multi-page interactive dashboards &amp; relational queries</p>
           </div>
           <div className="glass-card p-4 rounded-xl text-left border border-white/[0.06] hover:border-orange-500/30 transition-all">
-            <span className="text-orange-400 font-mono text-xl sm:text-2xl font-bold">3 Projects</span>
-            <p className="text-[12px] text-neutral-400 mt-1">Data analysis, AI reconciliation &amp; mobile solutions</p>
+            <span className="text-orange-400 font-mono text-xl sm:text-2xl font-bold">2 Projects</span>
+            <p className="text-[12px] text-neutral-400 mt-1">Data analytics, SQL queries &amp; Power BI dashboards</p>
           </div>
           <div className="glass-card p-4 rounded-xl text-left border border-white/[0.06] hover:border-orange-500/30 transition-all">
             <span className="text-orange-400 font-mono text-xl sm:text-2xl font-bold">IBM Track</span>
